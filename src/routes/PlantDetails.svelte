@@ -2,36 +2,6 @@
   export let id; // Plant ID passed as a prop
   import { Droplet, Thermometer, Beaker } from 'lucide-svelte';
 
-  // Mock plant data - replace with actual API calls
-  const plantData = [
-    {
-      id: 1,
-      name: "Tomato",
-      requirements: {
-        temperature: 25,
-        moisture: 60,
-        npk: { nitrogen: 20, phosphorus: 20, potassium: 20 }
-      }
-    },
-    {
-      id: 2,
-      name: "Cucumber",
-      requirements: {
-        temperature: 22,
-        moisture: 55,
-        npk: { nitrogen: 10, phosphorus: 15, potassium: 20 }
-      }
-    },
-    {
-      id: 3,
-      name: "Chilli",
-      requirements: {
-        temperature: 27,
-        moisture: 50,
-        npk: { nitrogen: 15, phosphorus: 20, potassium: 25 }
-      }
-    }
-  ];
   let soilMoisture = 0;
 
   async function fetchSoilMoisture() {
@@ -44,12 +14,41 @@
     }
   }
 
-  setInterval(fetchSoilMoisture, 5000); // Fetch data every 5 sec
+  setInterval(fetchSoilMoisture, 2000); // Fetch data every 5 sec
 
-  // Default sensor readings (Replace with API data)
+  // Mock plant data - replace with actual API calls
+  const plantData = [
+    {
+      id: 1,
+      name: "Tomato",
+      requirements: {
+        temperature: 25,
+        soilmoisture:72,
+        npk: { nitrogen: 20, phosphorus: 20, potassium: 20 }
+      }
+    },
+    {
+      id: 2,
+      name: "Cucumber",
+      requirements: {
+        temperature: 22,
+        soilmoisture:72,
+        npk: { nitrogen: 10, phosphorus: 15, potassium: 20 }
+      }
+    },
+    {
+      id: 3,
+      name: "Chilli",
+      requirements: {
+        temperature: 27,
+        soilmoisture:72,
+        npk: { nitrogen: 15, phosphorus: 20, potassium: 25 }
+      }
+    }
+  ];
+
   let sensorData = {
     temperature: 23,
-    moisture: 45,
     npk: { nitrogen: 10, phosphorus: 18, potassium: 18 }
   };
 
@@ -60,12 +59,11 @@
   $: selectedPlant = plantData.find(p => p.id === Number(id)) || plantData[0];
 
   // Determine if the motor should be turned on based on moisture level
-  $: motorShouldBeOn = sensorData.moisture < selectedPlant.requirements.moisture;
+  $: motorShouldBeOn = soilMoisture < 50; // Adjust based on your threshold
 
   async function toggleMotor() {
     isLoading = true;
     try {
-      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 500));
       isMotorRunning = !isMotorRunning;
       console.log(`Motor turned ${isMotorRunning ? 'on' : 'off'}`);
@@ -100,7 +98,7 @@
               <Droplet class="text-blue-500" size={24} />
               <div>
                 <p class="text-sm text-gray-600">Soil Moisture</p>
-                <p class="font-medium">{selectedPlant.requirements.moisture}%</p>
+                <p class="font-medium">{selectedPlant.requirements.soilmoisture}%</p>
               </div>
             </div>
 
@@ -154,8 +152,8 @@
           <!-- Motor Toggle Button -->
           <button
             on:click={toggleMotor}
-            class="w-full px-4 py-2 rounded-lg text-white transition-all 
-                   {isMotorRunning ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}"
+            class="w-full px-4 py-2 rounded-lg text-white transition-all
+              {isMotorRunning ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'}"
             disabled={isLoading}
           >
             {isLoading ? 'Processing...' : (isMotorRunning ? 'Turn Motor Off' : 'Turn Motor On')}

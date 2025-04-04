@@ -2,19 +2,30 @@
   export let id; // Plant ID passed as a prop
   import { Droplet, Thermometer, Beaker } from 'lucide-svelte';
 
-  let soilMoisture = 0;
+  let sensorData = {
+    temperature: 0,
+    humidity: 0,
+    soil_moisture: 0,
+    npk: { nitrogen: 0, phosphorus: 0, potassium: 0 }
+  };
 
-  async function fetchSoilMoisture() {
+  async function fetchSensorData() {
     try {
-      const response = await fetch("http://192.168.211.245/soilmoisture");
+      const response = await fetch("http://192.168.221.245/data");
+      if (!response.ok) throw new Error("Failed to fetch data");
+
       const data = await response.json();
-      soilMoisture = data.moisture;
+      console.log("Fetched Sensor Data:", data);
+
+      // Update sensorData object reactively
+      sensorData = { ...data };
     } catch (error) {
-      console.error("Error fetching soil moisture:", error);
+      console.error("Error fetching sensor data:", error);
     }
   }
 
-  setInterval(fetchSoilMoisture, 2000); // Fetch data every 5 sec
+  // Fetch data every 5 seconds
+  setInterval(fetchSensorData, 5000);
 
   // Mock plant data - replace with actual API calls
   const plantData = [
@@ -23,7 +34,7 @@
       name: "Tomato",
       requirements: {
         temperature: 25,
-        soilmoisture:72,
+        soilmoisture: 72,
         npk: { nitrogen: 20, phosphorus: 20, potassium: 20 }
       }
     },
@@ -32,7 +43,7 @@
       name: "Cucumber",
       requirements: {
         temperature: 22,
-        soilmoisture:72,
+        soilmoisture: 72,
         npk: { nitrogen: 10, phosphorus: 15, potassium: 20 }
       }
     },
@@ -41,25 +52,17 @@
       name: "Chilli",
       requirements: {
         temperature: 27,
-        soilmoisture:72,
+        soilmoisture: 72,
         npk: { nitrogen: 15, phosphorus: 20, potassium: 25 }
       }
     }
   ];
-
-  let sensorData = {
-    temperature: 23,
-    npk: { nitrogen: 10, phosphorus: 18, potassium: 18 }
-  };
 
   let isMotorRunning = false;
   let isLoading = false;
 
   // Find the correct plant by ID
   $: selectedPlant = plantData.find(p => p.id === Number(id)) || plantData[0];
-
-  // Determine if the motor should be turned on based on moisture level
-  $: motorShouldBeOn = soilMoisture < 50; // Adjust based on your threshold
 
   async function toggleMotor() {
     isLoading = true;
@@ -132,7 +135,7 @@
               <Droplet class="text-blue-500" size={24} />
               <div>
                 <p class="text-sm text-gray-600">Soil Moisture</p>
-                <p class="font-medium">{soilMoisture}%</p>
+                <p class="font-medium">{sensorData.soil_moisture}%</p>
               </div>
             </div>
 

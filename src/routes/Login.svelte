@@ -59,9 +59,7 @@
 
     <p class="text-center text-sm text-gray-600 mt-4">
       Don't have an account? 
-      <Link to="/register" class="text-green-600 hover:underline ml-1">
-        Register here
-      </Link>
+      <button on:click={handleRegister}>Register</button>
     </p>
   </div>
 </div>

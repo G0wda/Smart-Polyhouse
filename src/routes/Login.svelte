@@ -9,6 +9,12 @@
     // TODO: Add actual authentication logic
     navigate("/dashboard");
   };
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    // TODO: Add actual authentication logic
+    navigate("/register");
+  };
 </script>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-100">
@@ -49,5 +55,12 @@
         Login
       </button>
     </form>
+
+    <p class="text-center text-sm text-gray-600 mt-4">
+      Don't have an account? 
+      <a href="/register"  class="text-green-600 hover:underline ml-1">
+        Register here
+      </a>
+    </p>
   </div>
 </div>

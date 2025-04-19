@@ -17,7 +17,12 @@
     "vite": "^5.4.2"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "lucide-svelte": "^0.483.0",
+    "sqlite3": "^5.1.7",
     "svelte-routing": "^2.11.0"
   }
 }

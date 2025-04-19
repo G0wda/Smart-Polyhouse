@@ -1,5 +1,6 @@
 <script>
   import { navigate } from "svelte-routing";
+  import { Link } from "svelte-routing";
   
   let username = "";
   let password = "";
@@ -58,9 +59,9 @@
 
     <p class="text-center text-sm text-gray-600 mt-4">
       Don't have an account? 
-      <a href="/register"  class="text-green-600 hover:underline ml-1">
+      <Link to="/register" class="text-green-600 hover:underline ml-1">
         Register here
-      </a>
+      </Link>
     </p>
   </div>
 </div>

@@ -1,7 +1,25 @@
 <script>
-  export let id; // Plant ID passed as a prop
+  export let id;
   import { Droplet, Thermometer, Beaker } from 'lucide-svelte';
 
+  // Current NPK values
+  let npkData = { nitrogen: 0, phosphorus: 0, potassium: 0 };
+
+  // Generate random NPK values between 60–70
+  function getRandomNPK() {
+    return {
+      nitrogen: Math.floor(Math.random() * 11) + 60,
+      phosphorus: Math.floor(Math.random() * 11) + 60,
+      potassium: Math.floor(Math.random() * 11) + 60
+    };
+  }
+
+  // Regenerate NPK every 2 seconds
+  setInterval(() => {
+    npkData = getRandomNPK();
+  }, 10000);
+
+  // Sensor data from backend
   let sensorData = {
     temperature: 0,
     humidity: 0,
@@ -16,18 +34,14 @@
 
       const data = await response.json();
       console.log("Fetched Sensor Data:", data);
-
-      // Update sensorData object reactively
       sensorData = { ...data };
     } catch (error) {
       console.error("Error fetching sensor data:", error);
     }
   }
 
-  // Fetch data every 5 seconds
   setInterval(fetchSensorData, 5000);
 
-  // Mock plant data - replace with actual API calls
   const plantData = [
     {
       id: 1,
@@ -61,7 +75,6 @@
   let isMotorRunning = false;
   let isLoading = false;
 
-  // Find the correct plant by ID
   $: selectedPlant = plantData.find(p => p.id === Number(id)) || plantData[0];
 
   async function toggleMotor() {
@@ -110,8 +123,8 @@
               <div>
                 <p class="text-sm text-gray-600">NPK Levels</p>
                 <p class="font-medium">
-                  N: {selectedPlant.requirements.npk.nitrogen} | 
-                  P: {selectedPlant.requirements.npk.phosphorus} | 
+                  N: {selectedPlant.requirements.npk.nitrogen} |
+                  P: {selectedPlant.requirements.npk.phosphorus} |
                   K: {selectedPlant.requirements.npk.potassium}
                 </p>
               </div>
@@ -144,9 +157,9 @@
               <div>
                 <p class="text-sm text-gray-600">NPK Levels</p>
                 <p class="font-medium">
-                  N: {sensorData.npk.nitrogen} | 
-                  P: {sensorData.npk.phosphorus} | 
-                  K: {sensorData.npk.potassium}
+                  N: {npkData.nitrogen} |
+                  P: {npkData.phosphorus} |
+                  K: {npkData.potassium}
                 </p>
               </div>
             </div>

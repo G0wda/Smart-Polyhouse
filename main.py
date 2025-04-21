@@ -21,7 +21,7 @@ print("Connected to WiFi:", wifi.ifconfig())
 
 # Sensor Pin Configurations
 soil_moisture = machine.ADC(0)  # Soil moisture sensor on A0
-dht_sensor = dht.DHT22(machine.Pin(2))  # DHT sensor on GPIO2 (D4)
+dht_sensor = dht.DHT11(machine.Pin(14))  # DHT sensor on GPIO2 (D4)
 
 # NPK Analog Inputs
 n_pin = machine.Pin(5, machine.Pin.IN)  # Nitrogen on GPIO5 (D1)
@@ -31,7 +31,7 @@ k_pin = machine.Pin(0, machine.Pin.IN)  # Potassium on GPIO0 (D3)
 # Start HTTP Server
 server_socket = socket.socket()
 server_socket.bind(('', 80))
-server_socket.listen(1)
+server_socket.listen(2)
 
 def get_sensor_data():
     try:

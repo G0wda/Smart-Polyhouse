@@ -8,9 +8,9 @@
   // Generate random NPK values between 60–70
   function getRandomNPK() {
     return {
-      nitrogen: Math.floor(Math.random() * 11) + 60,
-      phosphorus: Math.floor(Math.random() * 11) + 60,
-      potassium: Math.floor(Math.random() * 11) + 60
+      nitrogen: Math.floor(Math.random() * 11) + 20,
+      phosphorus: Math.floor(Math.random() * 11) + 20,
+      potassium: Math.floor(Math.random() * 11) + 20
     };
   }
 
@@ -29,7 +29,7 @@
 
   async function fetchSensorData() {
     try {
-      const response = await fetch("http://192.168.221.245/data");
+      const response = await fetch("http://192.168.206.245/data");
       if (!response.ok) throw new Error("Failed to fetch data");
 
       const data = await response.json();
